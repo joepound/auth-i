@@ -32,6 +32,7 @@ const login = (req, res) => {
       if (userMatch) {
         console.log("Checking if correct password was supplied...");
         if (bcrypt.compareSync(userData.UserPassword, userMatch.UserPassword)) {
+          req.session.user = userMatch;
           jwtAuth
             .generateToken(userMatch)
             .then(token => res.status(200).json({ success: true, token }));
