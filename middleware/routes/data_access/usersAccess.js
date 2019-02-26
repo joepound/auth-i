@@ -1,4 +1,4 @@
-const db = require("../../data/dbConfig");
+const db = require("../../../data/dbConfig");
 
 module.exports = {
   registerUser: userData => db("Users").insert(userData),

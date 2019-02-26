@@ -1,18 +1,20 @@
-module.exports = {
+const sendError = require("../errors/errorHandler");
+
+module.exports = (entryMsg, checkMsg, errorExitMsg) => ({
   userCredentials: (req, res, next) => {
+    console.log(entryMsg);
+
     const userData = req.body;
 
-    console.log(
-      "Checking if all required fields were supplied for adding new user..."
-    );
+    console.log(checkMsg);
     if (!userData.UserName) {
       sendError(res, 400, "Username not supplied.");
-      console.log("User registration attempt finished.");
+      console.log(errorExitMsg);
     } else if (!userData.UserPassword) {
       sendError(res, 400, "Password not supplied.");
-      console.log("User registration attempt finished.");
+      console.log(errorExitMsg);
     } else {
       next();
     }
   }
-};
+});
