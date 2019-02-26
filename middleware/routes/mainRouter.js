@@ -2,7 +2,9 @@ const express = require("express");
 const router = express.Router();
 
 const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
+const randomizeSecret = require("../authentication/secretRandomizer");
+const jwt = require("../authentication/jwt");
+
 const db = require("../../data/dbConfig");
 const sendError = require("../errors/errorHandler");
 
@@ -37,7 +39,8 @@ router.post("/register", (req, res) => {
   }
 });
 
-router.post("/login", (req, res) => {
+// Randomize  the secret keys in the environment variables on every login - disallows reuse of secret keys
+router.post("/login", randomizeSecret, (req, res) => {
   console.log("\nAttempting login...");
 
   const userData = req.body;
@@ -61,10 +64,9 @@ router.post("/login", (req, res) => {
           if (
             bcrypt.compareSync(userData.UserPassword, userMatch.UserPassword)
           ) {
-            const token = jwt.sign(userMatch, process.env.SECRET_KEY, {
-              expiresIn: 60
-            });
-            res.status(200).json({ success: true, token });
+            jwt
+              .generateToken(userMatch)
+              .then(token => res.status(200).json({ success: true, token }));
           } else {
             sendError(res, 401, "You shall not pass!");
           }
@@ -80,36 +82,17 @@ router.post("/login", (req, res) => {
   }
 });
 
-router.get(
-  "/users",
-  (req, res, next) => {
-    const token = req.get("Authorization");
-    if (token) {
-      console.log(token)
-      jwt.verify(token, process.env.SECRET_KEY, (err, decoded) => {
-        if (err) {
-          sendError(res, 401, "You shall not pass!");
-        } else {
-          req.decoded = decoded;
-          next();
-        }
-      });
-    } else {
-      sendError(res, 401, "You shall not pass!");
-    }
-  },
-  (req, res) => {
-    console.log("Attempting to GET all users...");
-    db("Users")
-      .then(users => {
-        res.status(200).json({ success: true, users });
-        console.log("GET attempt for all users finished.");
-      })
-      .catch(err => {
-        sendError(res, 500, err.errno || err.toString());
-        console.log("GET attempt for all users finished.");
-      });
-  }
-);
+router.get("/users", jwt.authenticate, (req, res) => {
+  console.log("Attempting to GET all users...");
+  db("Users")
+    .then(users => {
+      res.status(200).json({ success: true, users });
+      console.log("GET attempt for all users finished.");
+    })
+    .catch(err => {
+      sendError(res, 500, err.errno || err.toString());
+      console.log("GET attempt for all users finished.");
+    });
+});
 
 module.exports = router;
