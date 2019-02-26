@@ -3,9 +3,9 @@ const router = express.Router();
 
 const bcrypt = require("bcryptjs");
 const randomizeSecret = require("../authentication/secretRandomizer");
-const jwt = require("../authentication/jwt");
+const jwtAuth = require("../authentication/jwtAuth");
 
-const db = require("../../data/dbConfig");
+const dbHelper = require("../routes/data_access");
 const sendError = require("../errors/errorHandler");
 
 router.post("/register", (req, res) => {
@@ -21,15 +21,13 @@ router.post("/register", (req, res) => {
     sendError(res, 400, "Password not supplied.");
     console.log("User registration attempt finished.");
   } else {
-    const hash = bcrypt.hashSync(userData.UserPassword, 12);
+    userData.UserPassword = bcrypt.hashSync(userData.UserPassword, 12);
 
     console.log("Proceeding to register the new user...");
-    db("Users")
-      .insert(userData)
+    dbHelper
+      .registerUser(userData)
       .then(() => {
-        res
-          .status(201)
-          .json({ UserName: userData.UserName, UserPassword: hash });
+        res.status(201).json(userData);
         console.log("User registration attempt finished.");
       })
       .catch(err => {
@@ -54,9 +52,8 @@ router.post("/login", randomizeSecret, (req, res) => {
     console.log("User login attempt finished.");
   } else {
     console.log("Retrieving user information records...");
-    db("Users")
-      .where({ UserName: userData.UserName })
-      .first()
+    dbHelper
+      .getUserInfo(userData.UserName)
       .then(userMatch => {
         console.log("Checking if user exists...");
         if (userMatch) {
@@ -64,7 +61,7 @@ router.post("/login", randomizeSecret, (req, res) => {
           if (
             bcrypt.compareSync(userData.UserPassword, userMatch.UserPassword)
           ) {
-            jwt
+            jwtAuth
               .generateToken(userMatch)
               .then(token => res.status(200).json({ success: true, token }));
           } else {
@@ -82,9 +79,10 @@ router.post("/login", randomizeSecret, (req, res) => {
   }
 });
 
-router.get("/users", jwt.authenticate, (req, res) => {
+router.get("/users", jwtAuth.authenticate, (req, res) => {
   console.log("Attempting to GET all users...");
-  db("Users")
+  dbHelper
+    .getUserInfo()
     .then(users => {
       res.status(200).json({ success: true, users });
       console.log("GET attempt for all users finished.");
