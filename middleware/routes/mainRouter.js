@@ -1,6 +1,6 @@
 const randomizeSecret = require("../authentication/secretRandomizer");
 const sessionRestrict = require("../../middleware/authentication/session/sessionRestrict");
-const jwtAuth = require("../authentication/jwtAuth");
+// const jwtAuth = require("../authentication/jwtAuth");
 
 const validate = require("../errors/validationHandler"); // For validating data placed in request bodies 
 const statusMsgs = require("./logging/mainStatusMsgs"); // Status messages for console logging on this route
@@ -26,7 +26,7 @@ router.post(
 router.get(
   "/users",
   sessionRestrict,
-  jwtAuth.authenticate,
+  // jwtAuth.authenticate,
   helperFuncs.getAllUsers
 );
 
