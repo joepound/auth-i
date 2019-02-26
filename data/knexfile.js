@@ -3,7 +3,7 @@ module.exports = {
   development: {
     client: "sqlite3",
     connection: {
-      filename: "./recipe-book.sqlite3"
+      filename: "./testauthi.sqlite3"
     },
     useNullAsDefault: true,
     migrations: {
@@ -19,7 +19,7 @@ module.exports = {
   devServer: {
     client: "sqlite3",
     connection: {
-      filename: "./data/recipe-book.sqlite3"
+      filename: "./data/testauthi.sqlite3"
     },
     useNullAsDefault: true,
     pool: {
@@ -33,7 +33,7 @@ module.exports = {
   production: {
     client: "sqlite3",
     connection: {
-      filename: "./data/recipe-book.sqlite3"
+      filename: "./data/testauthi.sqlite3"
     },
     useNullAsDefault: true,
     pool: {
