@@ -21,7 +21,7 @@ server.use(express.json());
 // third party middleware
 server.use(helmet());
 server.use(morgan("dev"));
-server.use(session(sessionConfig)); // Configured session length is currently at: 1 minute
+server.use(session(sessionConfig)); // Configured session length is currently at: 1 hour
 
 // custom routing middleware
 server.use("/", rootRouter); // routing for root URL

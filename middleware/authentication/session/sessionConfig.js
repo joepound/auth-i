@@ -1,8 +1,10 @@
 module.exports = {
-  name: "monkey",
-  secret: "keep it secret, keep it safe!",
+  name: "Hello World",
+  secret: (process.env.SECRET_KEY = `${Date.now()}${Math.floor(
+    Math.random() * 100000000
+  )}`),
   cookie: {
-    maxAge: 1000 * 60,
+    maxAge: 1000 * 60 * 60,
     secure: false
   },
   httpOnly: true,

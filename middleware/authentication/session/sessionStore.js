@@ -6,5 +6,5 @@ module.exports = new KnexSessionStore({
   tablename: "sessions",
   sidfieldname: "sid",
   createtable: true,
-  clearInterval: 1000 * 60
+  clearInterval: 1000 * 60 * 60
 });
