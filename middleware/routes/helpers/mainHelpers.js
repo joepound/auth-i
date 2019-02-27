@@ -4,6 +4,10 @@ const jwtAuth = require("../../authentication/jwtAuth");
 const dbHelper = require("../data_access/usersAccess");
 const sendError = require("../../errors/errorHandler");
 
+const authenticate = (req, res) => {
+  res.status(200).json({ success: true, data: { message: "Authenticated." } });
+};
+
 const registerUser = (req, res) => {
   const userData = req.body;
   userData.UserPassword = bcrypt.hashSync(userData.UserPassword, 12);
@@ -12,7 +16,7 @@ const registerUser = (req, res) => {
   dbHelper
     .registerUser(userData)
     .then(() => {
-      res.status(201).json(userData);
+      res.status(201).json({ success: true, data: userData });
       console.log("User registration attempt finished.");
     })
     .catch(err => {
@@ -35,7 +39,11 @@ const login = (req, res) => {
           req.session.user = userMatch;
           jwtAuth
             .generateToken(userMatch)
-            .then(token => res.status(200).json({ success: true, token }));
+            .then(token =>
+              res
+                .status(200)
+                .json({ success: true, data: { message: "Login successful." } })
+            );
         } else {
           sendError(res, 401, "You shall not pass!");
         }
@@ -55,7 +63,7 @@ const getAllUsers = (req, res) => {
   dbHelper
     .getUserInfo()
     .then(users => {
-      res.status(200).json({ success: true, users });
+      res.status(200).json({ success: true, data: users });
       console.log("GET attempt for all users finished.");
     })
     .catch(err => {
@@ -65,6 +73,7 @@ const getAllUsers = (req, res) => {
 };
 
 module.exports = {
+  authenticate,
   registerUser,
   login,
   getAllUsers

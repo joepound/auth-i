@@ -4,7 +4,7 @@ module.exports = {
     Math.random() * 100000000
   )}`),
   cookie: {
-    maxAge: 1000 * 60 * 60,
+    maxAge: 1000 * 60 * 1,
     secure: false
   },
   httpOnly: true,

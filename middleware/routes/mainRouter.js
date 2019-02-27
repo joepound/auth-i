@@ -1,13 +1,16 @@
 const randomizeSecret = require("../authentication/secretRandomizer");
 const sessionRestrict = require("../../middleware/authentication/session/sessionRestrict");
 // const jwtAuth = require("../authentication/jwtAuth");
+const sessionDestroy = require("../authentication/session/sessionDestroy");
 
-const validate = require("../errors/validationHandler"); // For validating data placed in request bodies 
+const validate = require("../errors/validationHandler"); // For validating data placed in request bodies
 const statusMsgs = require("./logging/mainStatusMsgs"); // Status messages for console logging on this route
 const helperFuncs = require("./helpers/mainHelpers"); // Contains the actual work to be done at an endpoint
 
 // Create express router
 const router = require("express").Router();
+
+router.get("/auth", sessionRestrict, helperFuncs.authenticate);
 
 router.post(
   "/register",
@@ -29,5 +32,7 @@ router.get(
   // jwtAuth.authenticate,
   helperFuncs.getAllUsers
 );
+
+router.get("/logout", sessionDestroy);
 
 module.exports = router;

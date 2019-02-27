@@ -6,13 +6,10 @@ export const UsersContext = createContext();
 function UsersProvider(props) {
   const [usernameInput, setUsernameInput] = useState("");
   const [passwordInput, setPasswordInput] = useState("");
-  // const [users, setUsers] = useState([]);
-  // const [selectedUser, setSelectedUser] = useState("");
-  // const [newName, setNewName] = useState("");
-  // const [newBio, setNewBio] = useState("");
-  // const [isInUpdateMode, setIsInUpdateMode] = useState(false);
 
-  const baseURL = "http://localhost:5000";
+  const [users, setUsers] = useState(null);
+
+  const baseURL = "http://localhost:5000/api";
   const usersContext = {
     usernameInput,
     passwordInput,
@@ -22,11 +19,80 @@ function UsersProvider(props) {
       setPasswordInput
     },
 
-    login() {
-      
+    users,
+
+    authenticate() {
+      let isAuthenticated = false;
+      axios
+        .get(`${baseURL}/auth`)
+        .then(res => (isAuthenticated = true))
+        .catch(err => {
+          setUsers(null);
+          console.log(err);
+        });
+      return isAuthenticated;
     },
 
-    logout() {},
+    register(e) {
+      e.preventDefault();
+
+      if (!usernameInput) {
+        alert("Please enter a username first.");
+      } else if (!passwordInput) {
+        alert("Please enter a password first.");
+      } else {
+        const userData = {
+          UserName: usernameInput,
+          UserPassword: passwordInput
+        };
+        axios
+          .post(`${baseURL}/register`, userData)
+          .then(res => alert("User registration successful."))
+          .catch(err => {
+            alert("An error occurred in user registration.");
+            console.log(err);
+          });
+      }
+    },
+
+    login(e) {
+      e.preventDefault();
+
+      const userData = {
+        UserName: usernameInput,
+        UserPassword: passwordInput
+      };
+      axios
+        .post(`${baseURL}/login`, userData)
+        .then(res => alert("Login was successful."))
+        .catch(err => {
+          alert("Login failed.");
+          setUsers(null);
+          console.log(err);
+        });
+    },
+
+    getAllUsers() {
+      axios
+        .get(`${baseURL}/users`)
+        .then(res => setUsers(res.data))
+        .catch(err => {
+          setUsers(null);
+          alert("You must log in to view this content.");
+          console.log(err);
+        });
+    },
+
+    logout() {
+      axios
+        .get(`${baseURL}/logout`)
+        .then(res => alert("Logout was successful."))
+        .catch(err => {
+          alert("An error occurred in logging out.");
+          console.log(err);
+        })
+        .finally(setUsers(null));
+    },
 
     handleTextInputChange(e) {
       usersContext.textInputSetters[e.currentTarget.name](
@@ -34,121 +100,6 @@ function UsersProvider(props) {
       );
     }
   };
-  // const usersContext = {
-  //   users,
-  //   selectedUser,
-  //   newName,
-  //   newBio,
-  //   isInUpdateMode,
-
-  //   setIsInUpdateMode,
-
-  //   textInputSetters: {
-  //     setNewName,
-  //     setNewBio
-  //   },
-
-  //   getUsers() {
-  //     axios
-  //       .get(`${baseURL}/users`)
-  //       .then(res => {
-  //         res.data.sort((a, b) =>
-  //           a.name.toUpperCase().trim() > b.name.toUpperCase().trim() ? 1 : -1
-  //         );
-  //         setUsers(res.data);
-  //       })
-  //       .catch(err => console.log(err));
-  //   },
-
-  //   getUserById(id) {
-  //     axios
-  //       .get(`${baseURL}/users/${id}`)
-  //       .then(res => setSelectedUser(res.data))
-  //       .catch(err => console.log(err));
-  //   },
-
-  //   addUser() {
-  //     if (!newName) {
-  //       alert("Please enter a name first.");
-  //     } else if (!newBio) {
-  //       alert("Please enter a bio first.");
-  //     } else if (window.confirm("Are you sure you want to add a new user?")) {
-  //       const newUserObj = { name: newName, bio: newBio };
-  //       axios
-  //         .post(`${baseURL}/users`, newUserObj)
-  //         .then(res => {
-  //           alert(`User "${newName}" was successfully added.`);
-  //           usersContext.getUsers();
-  //           setNewName("");
-  //           setNewBio("");
-  //         })
-  //         .catch(err => console.log(err));
-  //     }
-  //   },
-
-  //   deleteUser() {
-  //     if (
-  //       window.confirm("Are you sure you want to deleted the selected user?")
-  //     ) {
-  //       axios
-  //         .delete(`${baseURL}/users/${selectedUser.id}`)
-  //         .then(res => {
-  //           alert(`User "${selectedUser.name}" was successfully deleted.`);
-  //           usersContext.getUsers();
-  //           setSelectedUser("");
-  //         })
-  //         .catch(err => console.log(err));
-  //     }
-  //   },
-
-  //   toggleUpdateMode() {
-  //     const toggledUpdateMode = !isInUpdateMode;
-
-  //     if (toggledUpdateMode) {
-  //       usersContext.populateUserForm();
-  //     }
-
-  //     setIsInUpdateMode(toggledUpdateMode);
-  //   },
-
-  //   populateUserForm() {
-  //     setNewName(selectedUser.name);
-  //     setNewBio(selectedUser.bio);
-  //   },
-
-  //   updateUser() {
-  //     if (!newName) {
-  //       alert("Please enter a name first.");
-  //     } else if (!newBio) {
-  //       alert("Please enter a bio first.");
-  //     } else if (
-  //       window.confirm("Are you sure you want to update the selected user?")
-  //     ) {
-  //       const userUpdatesObj = { name: newName, bio: newBio };
-  //       axios
-  //         .put(`${baseURL}/users/${selectedUser.id}`, userUpdatesObj)
-  //         .then(res => {
-  //           alert(`User "${newName}" was successfully updated.`);
-  //           usersContext.getUsers();
-  //           setSelectedUser(res.data);
-  //           setNewName("");
-  //           setNewBio("");
-  //           usersContext.toggleUpdateMode();
-  //         })
-  //         .catch(err => console.log(err));
-  //     }
-  //   },
-
-  //   handleTextInputChange(e) {
-  //     usersContext.textInputSetters[e.currentTarget.name](
-  //       e.currentTarget.value
-  //     );
-  //   },
-
-  //   handleUserSelect(e) {
-  //     usersContext.getUserById(e.currentTarget.value);
-  //   }
-  // };
 
   return (
     <UsersContext.Provider value={usersContext}>

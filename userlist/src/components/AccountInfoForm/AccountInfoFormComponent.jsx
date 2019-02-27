@@ -6,12 +6,11 @@ function AccountInfoForm(props) {
   const {
     usernameInput,
     passwordInput,
-    handleTextInputChange,
-    login
+    handleTextInputChange
   } = useContext(UsersContext);
 
   return (
-    <form className="userlist__account-info-form">
+    <form className="userlist__account-info-form" onSubmit={props.action}>
       <h2 className="userlist__account-info-form__heading">Form Name</h2>
       <div className="userlist__account-info-form__field">
         <label
@@ -53,7 +52,6 @@ function AccountInfoForm(props) {
         <button
           className="userlist__account-info-form__buttons__submit"
           type="submit"
-          onClick={login}
         >
           Submit
         </button>
