@@ -2,6 +2,7 @@
 
 const express = require("express");
 
+const cors = require("cors");
 const helmet = require("helmet");
 const morgan = require("morgan");
 const session = require("express-session");
@@ -19,6 +20,7 @@ const server = express();
 server.use(express.json());
 
 // third party middleware
+server.use(cors());
 server.use(helmet());
 server.use(morgan("dev"));
 server.use(session(sessionConfig)); // Configured session length is currently at: 1 hour
