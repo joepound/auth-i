@@ -1,0 +1,29 @@
+/* Color values */
+$lightgray: #d3d3d3;
+$mine-shaft: #2c2c2c;
+$cararra: #f0efe9;
+$white: #ffffff;
+$shark: #20232A;
+$malibu: #61DAFB;
+$snow: #fffafa;
+
+/*  Color assignments */
+
+// Global assignments
+$default-font-color: $mine-shaft;
+$outer-bg-color: $cararra;
+$inner-bg-color: $white;
+
+/* Font assignments */
+
+// Global assignments
+$body-font-family: "Roboto";
+$body-font-size: 1.5rem;
+$heading-font-family: "Roboto";
+$heading-font-size: 2.4rem;
+$input-focus-color: $malibu;
+
+// Button bar components assignments
+$submit-user-info-btn-bg-color: $malibu;
+$clear-user-info-btn-bg-color: $malibu;
+$user-info-btn-font-color: $snow;
