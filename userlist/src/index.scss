@@ -7,5 +7,8 @@
 
 @import "App";
 
+@import "./components/AppHeader/AppHeaderComponent";
+@import "./components/AccountInfoForm/AccountInfoFormComponent";
 
-@import "./components/HeaderComponents/Header";
+@import "./views/Login/LoginPage";
+@import "./views/Error/ErrorPage";

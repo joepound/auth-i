@@ -1,5 +1,6 @@
-.userlist__header {
+.userlist__app-header {
   text-align: center;
+  animation: fade-in 2s;
 
   &__app-logo {
     max-width: 87.5px;

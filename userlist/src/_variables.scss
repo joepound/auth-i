@@ -5,7 +5,7 @@ $cararra: #f0efe9;
 $white: #ffffff;
 $shark: #20232A;
 $malibu: #61DAFB;
-$amaranth: #e83f53;
+$snow: #fffafa;
 
 /*  Color assignments */
 
@@ -13,9 +13,6 @@ $amaranth: #e83f53;
 $default-font-color: $mine-shaft;
 $outer-bg-color: $cararra;
 $inner-bg-color: $white;
-
-// ButtonBar components assignments
-$button-bar-bg-color: $shark;
 
 /* Font assignments */
 
@@ -27,9 +24,6 @@ $heading-font-size: 2.4rem;
 $input-focus-color: $malibu;
 
 // Button bar components assignments
-$add-user-bg-color: $malibu;
-$add-user-font-color: $white;
-$remove-user-bg-color: $amaranth;
-$remove-user-font-color: $white;
-$update-user-bg-color: $malibu;
-$update-user-font-color: $white;
+$submit-user-info-btn-bg-color: $malibu;
+$clear-user-info-btn-bg-color: $malibu;
+$user-info-btn-font-color: $snow;

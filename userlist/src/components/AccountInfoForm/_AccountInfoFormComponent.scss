@@ -1,0 +1,67 @@
+.userlist__account-info-form {
+  &__heading {
+    text-align: center;
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 50px;
+  }
+
+  &__field {
+    margin: 0 auto 40px;
+
+    &__label {
+      display: block;
+      font-size: 1.6rem;
+      font-weight: bold;
+      margin-bottom: 15px;
+    }
+
+    &__input {
+      @include smoothen-input-borders();
+
+      width: 100%;
+      padding: 7.5px 0 8.75px;
+    }
+  }
+
+  &__buttons {
+    @include make-flex(row, center, center);
+
+    margin: 56.25px auto 0;
+
+    %user-info-form-button {
+      width: 87.5px;
+      font-size: 1.6rem;
+      font-weight: bold;
+      color: $user-info-btn-font-color;
+      text-shadow: 0.5px 0.5px 0.5px black;
+      cursor: pointer;
+      padding: 7.5px 0;
+      margin-right: 12.5px;
+      transition: filter 250ms;
+
+      &:hover {
+        filter: brightness(110%);
+        transition: all 250ms;
+      }
+
+      &:active {
+        filter: brightness(87.5%);
+        text-shadow: 0.1px 0.1px 0.1px black;
+        transition: none;
+      }
+    }
+
+    &__submit {
+      @extend %user-info-form-button;
+
+      background-color: $submit-user-info-btn-bg-color;
+    }
+
+    &__clear {
+      @extend %user-info-form-button;
+
+      background-color: $clear-user-info-btn-bg-color;
+    }
+  }
+}

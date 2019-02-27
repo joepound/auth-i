@@ -1,12 +1,19 @@
 import React from "react";
-import { Route } from "react-router-dom";
+import { Switch, Route } from "react-router-dom";
 
-import { Header } from "./components/HeaderComponents";
+import { AppHeader } from "./components/AppHeader";
+
+import { LoginPage } from "./views/Login";
+import { ErrorPage } from "./views/Error";
 
 function App(props) {
   return (
     <div className="userlist">
-      <Header/>
+      <AppHeader />
+      <Switch>
+        <Route exact path="/" component={LoginPage} />
+        <Route path="*" component={ErrorPage} />
+      </Switch>
     </div>
   );
 }
