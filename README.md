@@ -1,5 +1,7 @@
 # Authentication Project
 
+Server URL: https://joepound-ls-auth1.herokuapp.com/
+
 ## Topics
 
 - Authentication.
